@@ -1,24 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
+import { useState, useEffect } from "react";
 import './App.css';
+import Page2 from './Page2'
+
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+function useFetch() {
+  const [data, setData] = useState([]);
+  
+  async function fetchData() {
+    await sleep(2000)
+    setData([1,2,3]);
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return [data];
+}
+
+
 
 function App() {
+  const [data, loading] = useFetch()
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {data.map((val, key) => (
+        <li key={key}>{val}</li>
+      ))}
+      <Page2 testdata={data} />
     </div>
   );
 }
